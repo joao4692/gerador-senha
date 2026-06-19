@@ -14,6 +14,24 @@ def gerar_senha_completa(tamanho):
     return senha
 
 
+def salvar_senhas(senhas):
+    with open("senhas_geradas.txt", "a") as arquivo:
+        arquivo.write("=== NOVA GERAÇÃO ===\n")
+        for senha in senhas:
+            arquivo.write(senha + "\n")
+        arquivo.write("\n")
+
+
+def pedir_quantidade():
+    while True:
+        entrada = input("Quantas senhas deseja gerar? ")
+
+        if entrada.isdigit() and int(entrada) > 0:
+            return int(entrada)
+
+        print("Digite um número válido maior que 0.")
+
+
 def pedir_tamanho():
     while True:
         entrada = input("Quantos caracteres você quer na senha? ")
@@ -26,8 +44,8 @@ def pedir_tamanho():
 
 def mostrar_menu():
     print("\n=== Gerador de Senhas ===")
-    print("1 - Senha numérica  (ex: 482910)")
-    print("2 - Senha completa  (ex: aB3#kL!9)")
+    print("1 - Senha numérica (múltiplas)")
+    print("2 - Senha completa (múltiplas)")
     print("0 - Sair")
 
     opcao = input("\nEscolha uma opção: ").strip()
@@ -42,13 +60,33 @@ def main():
 
         if opcao == "1":
             tamanho = pedir_tamanho()
-            senha = gerar_senha_numerica(tamanho)
-            print(f"\nSua senha numérica: {senha}")
+            quantidade = pedir_quantidade()
+
+            senhas = []
+
+            for _ in range(quantidade):
+                senhas.append(gerar_senha_numerica(tamanho))
+
+            for i, senha in enumerate(senhas, 1):
+                print(f"Senha {i}: {senha}")
+
+            salvar_senhas(senhas)
+            print("\nSenhas salvas em senhas_geradas.txt")
 
         elif opcao == "2":
             tamanho = pedir_tamanho()
-            senha = gerar_senha_completa(tamanho)
-            print(f"\nSua senha completa: {senha}")
+            quantidade = pedir_quantidade()
+
+            senhas = []
+
+            for _ in range(quantidade):
+                senhas.append(gerar_senha_completa(tamanho))
+
+            for i, senha in enumerate(senhas, 1):
+                print(f"Senha {i}: {senha}")
+
+            salvar_senhas(senhas)
+            print("\nSenhas salvas em senhas_geradas.txt")
 
         elif opcao == "0":
             print("\nAté mais!")
